@@ -11,7 +11,7 @@ protected:
 public:
 		//constructors
 	Entry();
-	Entry(ItemType item, KeyType searchKey);
+	Entry(KeyType searchKey, ItemType item);
 		//getters
 	ItemType getItem()  const;
 	KeyType getKey()  const;
@@ -27,7 +27,7 @@ template < class KeyType, class ItemType>
 Entry<KeyType, ItemType>::Entry() {}
 
 template<class KeyType, class ItemType>
-Entry<KeyType, ItemType>::Entry(ItemType item, KeyType searchKey) {
+Entry<KeyType, ItemType>::Entry(KeyType searchKey, ItemType item) {
 	this->item = item;
 	this->searchKey = searchKey;
 }

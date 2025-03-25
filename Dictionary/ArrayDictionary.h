@@ -10,7 +10,7 @@ class ArrayDictionary : public DictionaryInterface<KeyType, ItemType>
 private:
 	static const int DEFAULT_CAPACITY = 21;
 	Entry<KeyType, ItemType>* items;  // Array of dictionary entries 
-	int itemCount;    		// Current count of dictionary items 
+	int itemCount = 0;    		// Current count of dictionary items 
 	int maxItems;                   // Maximum capacity of the dictionary 
 	void destroyDictionary();
 	int findEntryIndex(int firstIndex, int lastIndex, const KeyType& searchKey) const;
@@ -44,17 +44,21 @@ int ArrayDictionary<KeyType, ItemType>::findEntryIndex(int firstIndex, int lastI
 	if (firstIndex > lastIndex) { return -1; }
 	int middle = (firstIndex + lastIndex) / 2;
 	if (items[middle].getKey() == searchKey) { return middle; }
-	else if (searchKey > items[middle].getKey()) { return findEntryIndex(middle, lastIndex, searchKey); }
-	else { return findEntryIndex(firstIndex, middle, searchKey); }
+	else if (searchKey > items[middle].getKey()) { return findEntryIndex(middle+1, lastIndex, searchKey); }
+	else { return findEntryIndex(firstIndex, middle-1, searchKey); }
 }
 
 //constructors
 template<class KeyType, class ItemType>
-ArrayDictionary<KeyType, ItemType>::ArrayDictionary() {}
+ArrayDictionary<KeyType, ItemType>::ArrayDictionary() {
+	maxItems = DEFAULT_CAPACITY;
+	items = new Entry<KeyType, ItemType>[maxItems];
+}
 
 template<class KeyType, class ItemType>
 ArrayDictionary<KeyType, ItemType>::ArrayDictionary(int maxItems){
 	this->maxItems = maxItems;
+	items = new Entry<KeyType, ItemType>[maxItems];
 }
 template<class KeyType, class ItemType>
 ArrayDictionary<KeyType, ItemType>::ArrayDictionary(const ArrayDictionary<KeyType, ItemType>& arrayDictionary){
@@ -67,6 +71,7 @@ ArrayDictionary<KeyType, ItemType>::ArrayDictionary(const ArrayDictionary<KeyTyp
 }
 template<class KeyType, class ItemType>
 ArrayDictionary<KeyType, ItemType>::~ArrayDictionary(){
+	delete[] items;
 }
 	//getters
 template<class KeyType, class ItemType>
@@ -79,7 +84,7 @@ int ArrayDictionary<KeyType, ItemType>::getNumberOfItems() const{
 }
 template<class KeyType, class ItemType>
 ItemType ArrayDictionary<KeyType, ItemType>::getItem(const KeyType& searchKey) const throw(NotFoundException) {
-	int position = findEntryIndex(1, itemCount, searchKey);
+	int position = findEntryIndex(0, itemCount-1, searchKey);
 	if (position < 0) { throw NotFoundException(); }
 	return items[position].getItem();
 }
@@ -101,7 +106,7 @@ bool ArrayDictionary<KeyType, ItemType>::add(const KeyType& searchKey, const Ite
 			--index;
 		}
 		// Insert new entry 
-		items[index] = Entry<KeyType, ItemType>(newItem, searchKey);
+		items[index] = Entry<KeyType, ItemType>(searchKey, newItem);
 		itemCount++; // Increase count of entries 
 	}
 	return ableToInsert;
