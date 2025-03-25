@@ -114,12 +114,13 @@ bool ArrayDictionary<KeyType, ItemType>::add(const KeyType& searchKey, const Ite
 template<class KeyType, class ItemType>
 bool ArrayDictionary<KeyType, ItemType>::remove(const KeyType& searchKey)
 {
-	int position = findEntryIndex(1, itemCount, searchKey);
-	if (position > 0) { return false; }
+	int position = findEntryIndex(0, itemCount, searchKey);
+	if (position < 0) { return false; }
 	while (position < itemCount-1) {
 		items[position] = items[position + 1];
-		itemCount--;
+		position++;
 	}
+	itemCount--;
 }
 template<class KeyType, class ItemType>
 void ArrayDictionary<KeyType, ItemType>::clear(){

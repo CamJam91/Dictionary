@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayDictionary.h" />
+    <ClInclude Include="BinaryNode.h" />
     <ClInclude Include="DictionaryInterface.h" />
     <ClInclude Include="Entry.h" />
     <ClInclude Include="NotFoundException.h" />
